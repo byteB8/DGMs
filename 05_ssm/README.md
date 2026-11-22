@@ -90,3 +90,13 @@ Timings were taken on a shared GPU, so compare them within this table only.
   (float32 rounding grows as the trained kernels get longer memory).
 - **Sampling cost per step: flat vs growing.** S4D spends about 2.7 ms on every step; the transformer's step grows
   from 2.6 to 3.6 ms as its KV cache grows. At 784 steps and this model size the gap is small; it widens with length.
+
+### Figures
+
+**Test log-likelihood during training** (left) and **time per sampling step** (right).
+
+![](figs/curves.png)
+
+**Samples**, drawn pixel by pixel in step mode: S4D (left), transformer (right).
+
+<img src="figs/samples_ssm.png" width="40%"> <img src="figs/samples_transformer.png" width="40%">
