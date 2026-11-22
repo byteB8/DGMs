@@ -121,3 +121,33 @@ python 06_ddpm/figures.py    # figures and tables
 - **Guidance trades variety for label fidelity.** As $w$ goes from 0 to 4, label accuracy rises from 89 % to 100 %
   while FID-lite rises from 3.7 to 42: samples get more typical of their class and less varied.
   Plain conditional sampling ($w = 0$) scores 3.7, better than unconditional (7.2), close to the 2.4 floor.
+
+### Figures
+
+**Forward process:** swiss roll and one Fashion-MNIST image at $t$ = 1, 51, 151, 301, 601, 1000.
+
+![](figs/forward_swissroll.png)
+
+<img src="figs/forward_fmnist.png" width="60%">
+
+**2-D samples** by sampler: swiss roll (top), 8 Gaussians (bottom).
+
+![](figs/swissroll_samplers.png)
+
+![](figs/8gauss_samplers.png)
+
+**Fashion-MNIST: steps and guidance.**
+
+![](figs/fmnist_sweeps.png)
+
+**Unconditional samples:** DDIM 10 steps, DDIM 50 steps (same noise), DDPM 1000 steps.
+
+| DDIM, 10 | DDIM, 50 | DDPM, 1000 |
+|---|---|---|
+| ![](figs/fmnist_ddim_10.png) | ![](figs/fmnist_ddim_50.png) | ![](figs/fmnist_ddpm_1000.png) |
+
+**Guided samples** (column $j$ = class $j$), $w$ = 0, 1, 4.
+
+| w = 0 | w = 1 | w = 4 |
+|---|---|---|
+| ![](figs/fmnist_guided_w0.png) | ![](figs/fmnist_guided_w1.png) | ![](figs/fmnist_guided_w4.png) |
