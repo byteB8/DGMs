@@ -1,0 +1,11 @@
+# data and run outputs
+data/
+runs/
+*.pt
+*.pth
+*.ckpt
+
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
