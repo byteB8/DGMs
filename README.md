@@ -11,7 +11,7 @@ Small PyTorch projects on deep generative models.
 | 03 | [flow](03_flow) | RealNVP on 2-D toys: learned density and how the Gaussian is warped | 8 of 8 modes, KL(p \|\| q) = 0.215 nats; thin bridges between modes |
 | 04 | [autoregressive](04_autoregressive) | Gated PixelCNN on binarized MNIST: exact test NLL, pixel-by-pixel sampling time | exact -log p(x) 57.7 nats (VAE: 75.2); 64 samples in 7.1 s |
 | 05 | [ssm](05_ssm) | Same task as 04 as a 784-step sequence: diagonal SSM (S4D) vs a causal transformer of equal size | S4D 55.2 nats, transformer 56.1 (PixelCNN 57.7); S4D step 3x cheaper to train, flat sampling cost |
-| 06 | [ddpm](06_ddpm) | DDPM on a swiss roll, then a small U-Net on Fashion-MNIST; DDIM at 10/50/1000 steps; classifier-free guidance | |
+| 06 | [ddpm](06_ddpm) | DDPM on a swiss roll, then a small U-Net on Fashion-MNIST; DDIM at 10/50/1000 steps; classifier-free guidance | DDIM 50 steps = DDPM 1000 (FID-lite 7.2 vs 7.1) at 1/20 the time; guidance: label accuracy 89 to 100 %, FID-lite 3.7 to 42 |
 | 07 | [flow_matching](07_flow_matching) | Same U-Net as 06 with the rectified-flow loss; quality vs number of steps | |
 | 08 | [vqvae_prior](08_vqvae_prior) | VQ-VAE on Fashion-MNIST, then a small transformer prior over the codes | samples FID-lite 20.8 (reconstructions 19.0); 144 bits per image vs 343 |
 | 09a | [clip](09a_clip) | Tiny CLIP on synthetic shape scenes; text-to-image retrieval | retrieval top-1 97.3 % (100 % with swapped-caption negatives); binding learned after a bag-of-words phase |
