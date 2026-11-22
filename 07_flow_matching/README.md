@@ -117,3 +117,39 @@ python 07_flow_matching/figures.py    # figures and tables
   $x_t / b_t = (a_t / b_t)\, x_1 + x_0$ depends only on the ratio $a_t / b_t$, so both deterministic samplers follow
   the same ODE with a different clock. Ideal models therefore map each noise sample to the same image.
 - **Guidance behaves as in 06.** Label accuracy rises from 91 % to 100 % as FID-lite rises from 3.5 to 61.
+
+### Figures
+
+**Sampling paths from the same noise** (100 Euler steps), before and after reflow.
+
+![](figs/8gauss_paths.png)
+
+**8 Gaussians by number of Euler steps:** flow matching (top), after reflow (bottom).
+
+![](figs/8gauss_steps.png)
+
+![](figs/8gauss_reflow_steps.png)
+
+**Swiss roll by number of Euler steps.**
+
+![](figs/swissroll_steps.png)
+
+**Fashion-MNIST: quality vs steps** (with DDIM from 06) **and label accuracy vs guidance.**
+
+![](figs/fmnist_sweeps.png)
+
+**Same noise, two models:** DDIM, 50 steps, from 06 (top) and flow matching, 50 Euler steps (bottom).
+
+![](figs/same_noise.png)
+
+**Fashion-MNIST samples** with 1, 5, 10 and 50 Euler steps (unconditional).
+
+| 1 step | 5 | 10 | 50 |
+|---|---|---|---|
+| ![](figs/fmnist_euler_1.png) | ![](figs/fmnist_euler_5.png) | ![](figs/fmnist_euler_10.png) | ![](figs/fmnist_euler_50.png) |
+
+**Guided samples** (column $j$ = class $j$), $w$ = 0, 1, 4.
+
+| w = 0 | w = 1 | w = 4 |
+|---|---|---|
+| ![](figs/fmnist_guided_w0.png) | ![](figs/fmnist_guided_w1.png) | ![](figs/fmnist_guided_w4.png) |
