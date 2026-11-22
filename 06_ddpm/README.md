@@ -73,8 +73,51 @@ python 06_ddpm/figures.py    # figures and tables
 
 ## Checklist
 
-- [ ] 2-D: swiss roll and 8 Gaussians
-- [ ] Fashion-MNIST: DDPM with 1000 steps vs DDIM with 10, 50, 100, 1000 steps
-- [ ] Classifier-free guidance, w from 0 to 4
+- [x] 2-D: swiss roll and 8 Gaussians
+- [x] Fashion-MNIST: DDPM with 1000 steps vs DDIM with 10, 50, 100, 1000 steps
+- [x] Classifier-free guidance, w from 0 to 4
 
 ## Results
+
+**8 Gaussians** (5000 samples).
+
+| Sampler | Steps | Modes covered | High-quality samples |
+|---|---|---|---|
+| DDPM | 1000 | 8 | 0.94 |
+| DDIM | 10 | 8 | 0.72 |
+| DDIM | 50 | 8 | 0.95 |
+| DDIM | 100 | 8 | 0.95 |
+| DDIM | 1000 | 8 | 0.94 |
+
+**Fashion-MNIST, samplers** (2000 unconditional samples, using the "no label" input; 2000 real training images score
+2.4 here, the floor at this sample size).
+
+| Sampler | Steps | FID-lite | Class KL | Rarest class share | Seconds per 1k samples |
+|---|---|---|---|---|---|
+| DDPM | 1000 | 7.1 | 0.027 | 0.070 | 344 |
+| DDIM | 10 | 26.0 | 0.035 | 0.055 | 3 |
+| DDIM | 50 | 7.2 | 0.024 | 0.072 | 17 |
+| DDIM | 100 | 6.2 | 0.025 | 0.072 | 34 |
+| DDIM | 1000 | 5.5 | 0.023 | 0.074 | 225 |
+
+**Fashion-MNIST, guidance** (DDIM, 50 steps, labels 0-9 in turn).
+
+| w | FID-lite | Label accuracy | Class KL |
+|---|---|---|---|
+| 0 | 3.7 | 0.890 | 0.003 |
+| 0.5 | 9.2 | 0.960 | 0.001 |
+| 1 | 16.1 | 0.983 | 0.000 |
+| 2 | 27.5 | 0.994 | 0.000 |
+| 4 | 42.4 | 1.000 | 0.000 |
+
+- **No mode collapse.** All 8 Gaussians are covered by every sampler, and Fashion-MNIST classes stay balanced
+  (compare the non-saturating GAN in 01, which kept 4 of 8).
+- **DDIM with 50 steps matches DDPM with 1000**, at about 1/20 of the time (FID-lite 7.2 vs 7.1).
+  With all 1000 steps the deterministic DDIM is better still (5.5).
+- **Too few steps blur the structure.** With 10 steps FID-lite rises to 26, and on 8 Gaussians the samples spread
+  along the straight edges between neighbouring modes.
+- **DDIM is a fixed map from noise to images.** From the same noise, 10 and 50 steps give the same items (grids below);
+  ancestral DDPM adds fresh noise at every step and gives different ones.
+- **Guidance trades variety for label fidelity.** As $w$ goes from 0 to 4, label accuracy rises from 89 % to 100 %
+  while FID-lite rises from 3.7 to 42: samples get more typical of their class and less varied.
+  Plain conditional sampling ($w = 0$) scores 3.7, better than unconditional (7.2), close to the 2.4 floor.
