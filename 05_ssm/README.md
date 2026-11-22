@@ -83,11 +83,12 @@ python 05_ssm/figures.py     # figures and table
 Timings were taken on a shared GPU, so compare them within this table only.
 
 - **Both sequence models beat the PixelCNN.** S4D reaches 55.2 nats and the transformer 56.1, against 57.7 for the
-  PixelCNN in 04 (same data, similar size). Unlike the PixelCNN's finite window, both can use every earlier pixel.
+  PixelCNN in 04 (same data, similar size), with 10 epochs instead of its 20. Unlike the PixelCNN's finite window,
+  both can use every earlier pixel.
 - **S4D learns faster per epoch and per second.** It is ahead at every epoch, and a training step costs about a third
   of the transformer's: $O(L \log L)$ convolution against $O(L^2)$ attention over 784 steps.
 - **One layer, two modes.** The FFT convolution and the recurrence give the same logits up to $3 \times 10^{-4}$
-  (float32 rounding grows as the trained kernels get longer memory).
+  (at initialisation the gap was 5e-6; likely float32 rounding in the long FFT, which grows as the kernels get longer memory).
 - **Sampling cost per step: flat vs growing.** S4D spends about 2.7 ms on every step; the transformer's step grows
   from 2.6 to 3.6 ms as its KV cache grows. At 784 steps and this model size the gap is small; it widens with length.
 
