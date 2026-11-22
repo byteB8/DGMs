@@ -15,7 +15,6 @@ from matplotlib.ticker import FuncFormatter  # noqa: E402
 import torch  # noqa: E402
 
 from common.utils import load_json, read_log  # noqa: E402
-from common.viz import save_image_grid  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 RUN, FIGS = HERE / "runs" / "t2i_s0", HERE / "figs"
@@ -85,7 +84,6 @@ def main():
     samples_figure(saved)
     metrics_figure(ev)
     steps = [r["step"] for r in read_log(RUN)]
-    save_image_grid(saved["samples"]["w1"], FIGS / "grid_w1.png")
     print(f"training snapshots at steps {steps}")
 
     sizes = ev["subset_sizes"]
