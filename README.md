@@ -6,7 +6,7 @@ Small PyTorch projects on deep generative models.
 
 | # | Project | What we build | Key result |
 |---|---|---|---|
-| 01 | [gan](01_gan) | Toy GAN on 8 Gaussians (watch mode collapse), fix with WGAN-GP; DCGAN and conditional GAN on Fashion-MNIST | |
+| 01 | [gan](01_gan) | Toy GAN on 8 Gaussians (watch mode collapse), fix with WGAN-GP; DCGAN and conditional GAN on Fashion-MNIST | non-saturating GAN keeps 4 of 8 modes, WGAN-GP 8 of 8 (penalty 0.1 or 1); Fashion-MNIST FID-lite 14.8 (WGAN-GP) vs 114 |
 | 02 | [vae](02_vae) | VAE on MNIST with a 2-D latent: latent map, interpolation, beta sweep (0.5, 1, 4) | -log p(x) 75.2 nats (16 latents) vs 129.4 (2); ELBO gap 4-12 nats |
 | 03 | [flow](03_flow) | RealNVP on 2-D toys: learned density and how the Gaussian is warped | 8 of 8 modes, KL(p \|\| q) = 0.215 nats; thin bridges between modes |
 | 04 | [autoregressive](04_autoregressive) | Gated PixelCNN on binarized MNIST: exact test NLL, pixel-by-pixel sampling time | exact -log p(x) 57.7 nats (VAE: 75.2); 64 samples in 7.1 s |
