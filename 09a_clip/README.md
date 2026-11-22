@@ -80,3 +80,17 @@ python 09a_clip/figures.py    # figures and table
 - **A small world.** 91 % of test captions also appear in training, so these numbers measure fitting this world,
   not generalisation to new phrases. In-batch negatives alone still learn binding here, likely because batches of 256 drawn
   from about 11.6k captions often contain near-duplicates.
+
+### Figures
+
+**Retrieval and binding during training.** Dashed lines: shapes swapped; solid: colors swapped.
+
+![](figs/curves.png)
+
+**Cosine similarity** between 8 test images (top) and their captions (rows), hard-negative model.
+
+![](figs/similarity.png)
+
+**Text-to-image retrieval:** top 5 of 1000 test images per caption; green frame = exact caption match.
+
+![](figs/retrieval.png)
