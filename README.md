@@ -24,12 +24,11 @@ Downloads go to `data/` (not tracked).
 
 | Data | Size | Used in |
 |---|---|---|
-| 2-D toys: 8 Gaussians, swiss roll, two moons (generated) | none | 01, 03, 06 |
+| 2-D toys: 8 Gaussians, swiss roll, two moons (generated) | none | 01, 03, 06, 07 |
 | MNIST, binarized MNIST | 11 MB | 02, 04, 05 |
 | Fashion-MNIST | 30 MB | 01, 06, 07, 08 |
-| CIFAR-10 (optional) | 170 MB | 08 |
 | Shape scenes with captions and Q&A (generated) | none | 09a, 09b, 09c |
-| Pretrained SigLIP-base and SmolLM2-135M | ~0.7 GB | 09b only |
+| Pretrained SigLIP-base and SmolLM2-135M-Instruct | ~1 GB | 09b, 09c |
 
 ## Evaluation
 
