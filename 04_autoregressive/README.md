@@ -72,3 +72,13 @@ python 04_autoregressive/figures.py    # figures and table
   so the last pixel never sees the top of the image.
 - **Sampling is the price.** 784 full forward passes give 64 digits in 7.1 s; one training pass scores all
   784 conditionals at once. The digits are clean locally, with some broken strokes, a sign of the limited window.
+
+### Figures
+
+**What each output depends on.** Grey: input pixels with a non-zero gradient for the outlined output pixel.
+
+![](figs/dependencies.png)
+
+**Samples** (64 digits, drawn pixel by pixel) and the training curve.
+
+<img src="figs/samples.png" width="35%"> <img src="figs/nll_curve.png" width="50%">
