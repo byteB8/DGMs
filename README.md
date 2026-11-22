@@ -15,7 +15,7 @@ Small PyTorch projects on deep generative models.
 | 07 | [flow_matching](07_flow_matching) | Same U-Net as 06 with the rectified-flow loss; quality vs number of steps | |
 | 08 | [vqvae_prior](08_vqvae_prior) | VQ-VAE on Fashion-MNIST, then a small transformer prior over the codes | samples FID-lite 20.8 (reconstructions 19.0); 144 bits per image vs 343 |
 | 09a | [clip](09a_clip) | Tiny CLIP on synthetic shape scenes; text-to-image retrieval | retrieval top-1 97.3 % (100 % with swapped-caption negatives); binding learned after a bag-of-words phase |
-| 09b | [mini_llava](09b_mini_llava) | Frozen SigLIP + frozen SmolLM2-135M + trained projector, then LoRA; answers questions about shapes | |
+| 09b | [mini_llava](09b_mini_llava) | Frozen SigLIP + frozen SmolLM2-135M + trained projector, then LoRA; answers questions about shapes | 91.9 % of questions with the projector alone, 99.1 % with LoRA; 37 % with another image |
 | 09c | [text2image](09c_text2image) | U-Net from 06/07 conditioned on the 09a text encoder; 09b checks the generated images | |
 
 ## Data
