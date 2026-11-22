@@ -81,8 +81,9 @@ Accuracy on all questions of the 5000 test scenes (about 40k questions).
 - **A projector alone gets most of the way.** With the language model untouched, 0.78 M trained parameters answer
   92 % of questions. Count and size are near perfect from the start.
 - **LoRA fixes color and shape.** Adding 0.46 M adapter weights inside the LM lifts color from 80 % to 99.9 % and
-  shape from 93 % to 99.9 % within 1000 steps. The frozen LM can read the visual tokens, but tying "the shape on the
-  left" to the right visual tokens needed a small change inside attention.
+  shape from 93 % to 99.9 % within 1000 steps. Stage 2 also adds 3000 training steps, and color was still rising at the
+  end of stage 1 (64 % to 81 %), so part of the gain may come from longer training; the jump right after LoRA is
+  switched on suggests most of it comes from the adapters.
 - **"Is there a red square?" stays hardest** (93 %). It needs color and shape bound together and a check over every
   object, the same binding problem as in 09a.
 - **The answers come from the image.** With another image's features, accuracy falls to the level of guessing:
