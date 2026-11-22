@@ -109,3 +109,32 @@ python 01_gan/train.py --data 8gauss --loss ns    # a single run
   The same $\lambda = 10$ gives the best Fashion-MNIST model (FID-lite 14.8, balanced classes).
 - **Labels fix class balance.** The conditional model hits the requested class 94 % of the time.
   Its FID-lite was lowest (about 30) at 5k-7k steps and then rose to 56.6; the table reports the final model.
+
+### Figures
+
+**8 Gaussians: final samples** (blue) over the data (grey).
+
+![](figs/8gauss_samples.png)
+
+**Modes covered during training**, and the generator gradient norm for the two GAN losses.
+
+![](figs/8gauss_curves.png)
+
+**Non-saturating GAN during training:** it starts on the whole ring and drops modes one by one.
+
+![](figs/8gauss_training_ns.png)
+
+**WGAN-GP with $\lambda = 10$ during training:** the samples never settle.
+
+![](figs/8gauss_training_wgan-gp.png)
+
+**Fashion-MNIST samples.**
+
+| Real | DCGAN, non-saturating | DCGAN, WGAN-GP |
+|---|---|---|
+| ![](figs/fmnist_real.png) | ![](figs/fmnist_ns.png) | ![](figs/fmnist_wgan-gp.png) |
+
+**Conditional DCGAN** (column $j$ = class $j$: T-shirt, trouser, pullover, dress, coat, sandal, shirt, sneaker, bag, boot),
+and FID-lite during training.
+
+<img src="figs/fmnist_ns_cond.png" width="45%"> <img src="figs/fmnist_fid.png" width="50%">
