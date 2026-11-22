@@ -100,3 +100,19 @@ Sampling takes 5.4 s per 1000 images: 49 prior steps and one decoder pass (the P
   about 12 epochs (train NLL keeps falling, test NLL flattens).
 - **Samples are almost as good as reconstructions.** FID-lite 20.8 against 19.0, the limit set by the decoder;
   88 % of samples show the requested class. For comparison, the WGAN-GP in 01 reached 14.8 and the conditional GAN 56.6.
+
+### Figures
+
+**Images and their 7 x 7 code grids.**
+
+![](figs/codes.png)
+
+**Training:** reconstruction error, code usage and prior NLL.
+
+![](figs/curves.png)
+
+**Prior samples** (column $j$ = class $j$) and **reconstructions** (top: input, bottom: output).
+
+<img src="figs/samples.png" width="45%">
+
+![](figs/reconstructions.png)
