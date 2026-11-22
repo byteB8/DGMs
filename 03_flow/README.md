@@ -77,3 +77,13 @@ Test NLL on 100k fresh samples, nats per point (lower is better; it can be negat
   so the samples $f^{-1}(z)$ cannot form truly separate islands. Forward KL then prefers thin bridges over dropping a mode.
 - **The layers cut and fold the Gaussian.** Each coupling stretches one coordinate as a function of the other.
   After 8 layers the four quadrants of $z$ are spread over several modes (figure below).
+
+### Figures
+
+**Learned density and samples** (blue: flow samples, grey: data).
+
+![](figs/density.png)
+
+**Gaussian samples pushed through the flow**, coloured by the quadrant of $z$ they start in.
+
+![](figs/layers.png)
