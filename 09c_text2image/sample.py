@@ -71,21 +71,31 @@ def clip_check(clip, images, captions) -> dict:
             "clip_retrieval_top1": sum(captions[b] == captions[i] for i, b in enumerate(best)) / len(captions)}
 
 
-def evaluate(model, clip, checker, scenes, captions, cond, guidance=(0.0, 1.0, 3.0), steps: int = 50):
+def check(clip, checker, images, scenes, captions, subsets: dict) -> dict:
+    """All checks on every subset of indices (e.g. captions seen / not seen in training)."""
+    out = {}
+    for name, idx in subsets.items():
+        r = {**vlm_check(checker, images[idx], [scenes[i] for i in idx]),
+             **clip_check(clip, images[idx], [captions[i] for i in idx])}
+        out.update({f"{name}_{k}": v for k, v in r.items()})
+    return out
+
+
+def evaluate(model, clip, checker, scenes, captions, cond, subsets, guidance=(0.0, 1.0, 3.0), steps: int = 50):
     results, samples = [], {}
     for w in guidance:
         torch.manual_seed(0)
         x = generate(model, cond, steps, w)
-        results.append({"w": w, **vlm_check(checker, x, scenes), **clip_check(clip, x, captions)})
+        results.append({"w": w, **check(clip, checker, x, scenes, captions, subsets)})
         samples[f"w{w:g}"] = x[:64].cpu()
-        print({k: round(v, 3) for k, v in results[-1].items()})
+        print({k: round(v, 3) for k, v in results[-1].items() if k.startswith(("all_vlm_all", "all_vlm_image", "unseen"))})
     return results, samples
 
 
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--run", required=True)
-    p.add_argument("--n", type=int, default=1000, help="test captions to generate from")
+    p.add_argument("--n", type=int, default=2000, help="test captions to generate from")
     p.add_argument("--clip-run", default="09a_clip/runs/clip_hardneg_s0")
     p.add_argument("--llava-run", default="09b_mini_llava/runs/lora_s0")
     args = p.parse_args()
@@ -100,11 +110,15 @@ def main():
     test = shapes.load("test")
     scenes, captions = test["scenes"][:args.n], test["captions"][:args.n]
     cond = clip.embed_texts(shapes.tokenize(captions).to(device))
-    reference = {**vlm_check(checker, shapes.to_float(test["images"][:args.n]).to(device), scenes),
-                 **clip_check(clip, shapes.to_float(test["images"][:args.n]).to(device), captions)}
-    print("real images:", {k: round(v, 3) for k, v in reference.items()})
-    results, samples = evaluate(model, clip, checker, scenes, captions, cond)
-    save_json({"real": reference, "generated": results}, run / "eval.json")
+    seen = set(shapes.load("train")["captions"])
+    subsets = {"all": list(range(len(captions))),
+               "seen": [i for i, c in enumerate(captions) if c in seen],
+               "unseen": [i for i, c in enumerate(captions) if c not in seen]}
+    real = check(clip, checker, shapes.to_float(test["images"][:args.n]).to(device), scenes, captions, subsets)
+    print("real images:", {k: round(v, 3) for k, v in real.items() if k.startswith(("all_vlm", "unseen_vlm"))})
+    results, samples = evaluate(model, clip, checker, scenes, captions, cond, subsets)
+    save_json({"subset_sizes": {k: len(v) for k, v in subsets.items()}, "real": real, "generated": results},
+              run / "eval.json")
     torch.save({"samples": samples, "captions": captions[:64]}, run / "eval_samples.pt")
     save_image_grid(samples["w1"], run / "samples_w1.png")
 
