@@ -90,3 +90,33 @@ Test set, nats per image (lower is better).
   distortion from 47.4 to 92.9. beta = 1 gives the best -ELBO (81.7), as it should, since that is the quantity it optimises.
 - **The 2-D latent space is organised by digit.** Moving across it changes the digit smoothly. Digits 4, 9 and 7 share
   one region, so an interpolation from a 4 to a 9 barely changes the image.
+
+### Figures
+
+**2-D latent space (beta = 1).** Left: decoded grid over $z \in [-2.5, 2.5]^2$. Right: encoder means of test images.
+
+<img src="figs/latent_grid_beta1.png" width="45%"> <img src="figs/latent_scatter.png" width="45%">
+
+**Rate vs distortion**, and the 2-D latent map for beta = 0.5, 1, 4.
+
+<img src="figs/rate_distortion.png" width="45%">
+
+| beta = 0.5 | beta = 1 | beta = 4 |
+|---|---|---|
+| ![](figs/latent_grid_beta0.5.png) | ![](figs/latent_grid_beta1.png) | ![](figs/latent_grid_beta4.png) |
+
+**Samples from the prior** (pixel means), latent size 2 vs 16.
+
+| Latent size 2 | Latent size 16 |
+|---|---|
+| ![](figs/prior_samples_z2.png) | ![](figs/prior_samples_z16.png) |
+
+**Reconstructions** (top: input, bottom: output), latent size 2 and 16.
+
+![](figs/reconstructions_z2.png)
+
+![](figs/reconstructions_z16.png)
+
+**Interpolation** between encoder means: 1 to 7, 3 to 8, 4 to 9 (latent size 2).
+
+![](figs/interpolation.png)
