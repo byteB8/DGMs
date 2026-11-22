@@ -87,3 +87,13 @@ Accuracy on all questions of the 5000 test scenes (about 40k questions).
   object, the same binding problem as in 09a.
 - **The answers come from the image.** With another image's features, accuracy falls to the level of guessing:
   1/4 for color, 1/3 for shape and count, 1/2 for size and yes / no.
+
+### Figures
+
+**Accuracy per question type** (left) and during training (right; LoRA switched on at step 3000).
+
+![](figs/accuracy.png)
+
+**Test scenes with questions and the model's answers** (LoRA model; all shown answers are correct).
+
+![](figs/examples.png)
