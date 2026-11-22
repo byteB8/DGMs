@@ -65,8 +65,28 @@ python 02_vae/train.py --z-dim 2 --beta 1    # a single run
 
 ## Checklist
 
-- [ ] 2-D latent: latent map, encoder means, interpolation
-- [ ] ELBO vs importance-sampled log p(x)
-- [ ] beta sweep: rate vs distortion
+- [x] 2-D latent: latent map, encoder means, interpolation
+- [x] ELBO vs importance-sampled log p(x)
+- [x] beta sweep: rate vs distortion
 
 ## Results
+
+Test set, nats per image (lower is better).
+
+| Latent size | beta | Reconstruction | KL | -ELBO | -log p(x) | Gap |
+|---|---|---|---|---|---|---|
+| 2 | 0.5 | 125.2 | 8.1 | 133.3 | 130.2 | 3.1 |
+| 2 | 1 | 126.2 | 7.1 | 133.3 | 129.4 | 3.9 |
+| 2 | 4 | 131.7 | 5.2 | 136.9 | 130.0 | 6.9 |
+| 16 | 0.5 | 47.4 | 34.6 | 82.0 | 75.5 | 6.6 |
+| 16 | 1 | 58.7 | 23.0 | 81.7 | 75.2 | 6.4 |
+| 16 | 4 | 92.9 | 9.7 | 102.7 | 91.0 | 11.6 |
+
+- **Latent size matters most.** 16 latents reach -log p(x) = 75.2 nats; 2 latents reach 129.4.
+  With only 2 numbers per image, the decoder outputs blurry averages.
+- **The ELBO is a loose bound.** It sits 3-12 nats below log p(x). The gap is KL(q(z|x) || p(z|x)), and it grows with
+  beta (6.4 to 11.6 nats at 16 latents): a large beta pulls q towards the prior and away from the true posterior.
+- **beta trades rate for distortion.** At 16 latents, beta 0.5 to 4 cuts the rate from 34.6 to 9.7 nats and raises the
+  distortion from 47.4 to 92.9. beta = 1 gives the best -ELBO (81.7), as it should, since that is the quantity it optimises.
+- **The 2-D latent space is organised by digit.** Moving across it changes the digit smoothly. Digits 4, 9 and 7 share
+  one region, so an interpolation from a 4 to a 9 barely changes the image.
