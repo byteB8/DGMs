@@ -38,7 +38,7 @@ rate-distortion curve.
 | Math | Code |
 |---|---|
 | $\log p(x \mid z)$ for Bernoulli pixels | `objective.py: bernoulli_log_likelihood` |
-| $\mathrm{KL}(\mathcal N(\mu, \sigma^2) \,\|\, \mathcal N(0, I))$ | `objective.py: gaussian_kl` |
+| $\mathrm{KL}(\mathcal N(\mu, \sigma^2) \,\Vert\, \mathcal N(0, I))$ | `objective.py: gaussian_kl` |
 | $D + \beta R$ | `objective.py: negative_elbo` |
 | $\log \frac1k \sum_j p(x \mid z_j) p(z_j) / q(z_j \mid x)$ | `objective.py: importance_log_likelihood` |
 | $z = \mu + \sigma \odot \epsilon$ | `model.py: VAE.reparameterize` |

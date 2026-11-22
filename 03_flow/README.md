@@ -44,7 +44,7 @@ modes than miss one. For 8 Gaussians we know $\log p$ exactly, so the KL can be 
 | Data | 8 Gaussians, swiss roll, two moons (fresh samples every step) |
 | Flow | 8 affine coupling layers; $s, t$ from an MLP with 3 hidden layers of 256; $s$ bounded by tanh |
 | Optimiser | Adam, lr 5e-4 with cosine decay, batch 512, 10k steps |
-| Metrics | test NLL on 100k fresh samples (nats); for 8 Gaussians also the true NLL and $\mathrm{KL}(p \,\|\, q)$ |
+| Metrics | test NLL on 100k fresh samples (nats); for 8 Gaussians also the true NLL and $\mathrm{KL}(p \,\Vert\, q)$ |
 
 ## Run
 
