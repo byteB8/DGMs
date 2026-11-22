@@ -16,6 +16,14 @@ def eight_gaussians(n: int, radius: float = 2.0, std: float = 0.05) -> torch.Ten
     return centers[idx] + std * torch.randn(n, 2)
 
 
+def eight_gaussians_log_prob(x: torch.Tensor, radius: float = 2.0, std: float = 0.05) -> torch.Tensor:
+    """Exact log density of the 8-Gaussian mixture: log (1/8) sum_k N(x; c_k, std^2 I)."""
+    centers = eight_gaussian_centers(radius).to(x)
+    sq_dist = ((x[:, None, :] - centers[None]) ** 2).sum(-1)                  # (n, 8)
+    log_comp = -sq_dist / (2 * std ** 2) - math.log(2 * math.pi * std ** 2)
+    return torch.logsumexp(log_comp, dim=1) - math.log(8)
+
+
 def swiss_roll(n: int, noise: float = 0.08) -> torch.Tensor:
     """Spiral x = t (cos t, sin t), t in [1.5 pi, 4.5 pi], scaled to about [-2.5, 2.5]."""
     t = 1.5 * math.pi * (1 + 2 * torch.rand(n))
