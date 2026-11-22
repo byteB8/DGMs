@@ -99,7 +99,8 @@ Sampling takes 5.4 s per 1000 images: 49 prior steps and one decoder pass (the P
 - **The prior compresses the codes by 58 %.** 144 bits per image instead of 343. It starts to overfit after
   about 12 epochs (train NLL keeps falling, test NLL flattens).
 - **Samples are almost as good as reconstructions.** FID-lite 20.8 against 19.0, the limit set by the decoder;
-  88 % of samples show the requested class. For comparison, the WGAN-GP in 01 reached 14.8 and the conditional GAN 56.6.
+  88 % of samples show the requested class. The WGAN-GP in 01 reached 14.8 and the conditional GAN 56.6, but with
+  10k samples instead of 2000 (FID-lite falls as the sample count grows), so these are rough comparisons.
 
 ### Figures
 
