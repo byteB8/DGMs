@@ -1,0 +1,67 @@
+# DGMs
+
+Small projects on deep generative models, written from scratch in PyTorch.
+Each project links the math to the exact code that implements it, on tiny data and short runs
+(minutes to about an hour on one GPU).
+
+## Roadmap
+
+| # | Project | What we build | Status | Key result |
+|---|---|---|---|---|
+| 01 | [gan](01_gan) | Toy GAN on 8 Gaussians (watch mode collapse), fix with WGAN-GP; DCGAN and conditional GAN on Fashion-MNIST | todo | |
+| 02 | [vae](02_vae) | VAE on MNIST with a 2-D latent: latent map, interpolation, beta sweep (0.5, 1, 4) | todo | |
+| 03 | [flow](03_flow) | RealNVP on 2-D toys: learned density and how the Gaussian is warped | todo | |
+| 04 | [autoregressive](04_autoregressive) | Gated PixelCNN on binarized MNIST: exact test NLL, pixel-by-pixel sampling time | todo | |
+| 05 | [ssm](05_ssm) | Same task as 04 as a 784-step sequence: diagonal SSM (S4D) vs a causal transformer of equal size | todo | |
+| 06 | [ddpm](06_ddpm) | DDPM on a swiss roll, then a small U-Net on Fashion-MNIST; DDIM at 10/50/1000 steps; classifier-free guidance | todo | |
+| 07 | [flow_matching](07_flow_matching) | Same U-Net as 06 with the rectified-flow loss; quality vs number of steps | todo | |
+| 08 | [vqvae_prior](08_vqvae_prior) | VQ-VAE on Fashion-MNIST or CIFAR-10, then a small transformer prior over the codes | todo | |
+| 09a | [clip](09a_clip) | Tiny CLIP on synthetic shape scenes; text-to-image retrieval | todo | |
+| 09b | [mini_llava](09b_mini_llava) | Frozen SigLIP + frozen SmolLM2-135M + trained projector, then LoRA; answers questions about shapes | todo | |
+| 09c | [text2image](09c_text2image) | U-Net from 06/07 conditioned on the 09a text encoder; 09b checks the generated images | todo | |
+
+Status: todo, in progress, done.
+
+## Data
+
+All small. Downloads go to `data/` (not tracked).
+
+| Data | Size | Used in |
+|---|---|---|
+| 2-D toys: 8 Gaussians, swiss roll, two moons (generated) | none | 01, 03, 06 |
+| MNIST, binarized MNIST | 11 MB | 02, 04, 05 |
+| Fashion-MNIST | 30 MB | 01, 06, 07, 08 |
+| CIFAR-10 (optional) | 170 MB | 08 |
+| Shape scenes with captions and Q&A (generated) | none | 09a, 09b, 09c |
+| Pretrained SigLIP-base and SmolLM2-135M | ~0.7 GB | 09b only |
+
+## Evaluation
+
+| Model type | Metric |
+|---|---|
+| Likelihood models (VAE bound, flow, PixelCNN, SSM) | test NLL in nats, or bits per dim |
+| Sample-only models (GAN, DDPM, flow matching) | FID-lite from one small classifier in `common/`, plus class coverage |
+| 2-D toys | samples over the true density; modes covered out of 8 |
+| VLM | retrieval top-1 (09a), answer accuracy per question type (09b), share of correct images (09c) |
+| All | sample grid at fixed seeds; time to draw 64 samples |
+
+## Layout
+
+```
+common/            shared code: data, toy sets, shape scenes, networks, metrics, plots
+NN_name/           one project
+  README.md        problem, math, equation-to-code map, checklist, results
+  objective.py     loss terms (the math)
+  sample.py        sampling and evaluation (the math)
+  model.py         networks
+  train.py         training loop
+  figs/            figures shown in the README
+```
+
+Runs write checkpoints and logs to `runs/` (not tracked).
+
+## Setup
+
+```
+pip install -r requirements.txt
+```
