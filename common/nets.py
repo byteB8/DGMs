@@ -183,3 +183,22 @@ class TransformerBlock(nn.Module):
     def forward(self, x, causal: bool = False, pad_mask=None):
         x = x + self.attn(self.norm1(x), causal, pad_mask)
         return x + self.mlp(self.norm2(x))
+
+
+class TextEncoder(nn.Module):
+    """Token ids (B, L), 0 = padding -> one vector per text: transformer blocks, then the mean over real tokens."""
+
+    def __init__(self, vocab_size: int, d: int = 128, n_layers: int = 3, n_heads: int = 4, max_len: int = 32):
+        super().__init__()
+        self.embed = nn.Embedding(vocab_size, d)
+        self.pos = nn.Parameter(torch.zeros(max_len, d))
+        self.blocks = nn.ModuleList(TransformerBlock(d, n_heads) for _ in range(n_layers))
+        self.norm = nn.LayerNorm(d)
+
+    def forward(self, tokens):
+        pad = tokens == 0
+        h = self.embed(tokens) + self.pos[:tokens.shape[1]]
+        for block in self.blocks:
+            h = block(h, pad_mask=pad)
+        keep = (~pad).float()[..., None]
+        return (self.norm(h) * keep).sum(1) / keep.sum(1)
