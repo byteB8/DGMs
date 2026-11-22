@@ -141,3 +141,45 @@ class UNet(nn.Module):
             else:
                 h = layer(h)
         return self.out(h)
+
+
+# ------------------------------------------------------------------------------------- transformer
+class Attention(nn.Module):
+    """Multi-head self-attention: softmax(Q K^T / sqrt(d_head) + M) V.
+
+    causal=True sets M = -inf above the diagonal (position t sees positions <= t).
+    pad_mask (B, T), True at padding, hides those keys from every query.
+    """
+
+    def __init__(self, d: int, n_heads: int, dropout: float = 0.0):
+        super().__init__()
+        self.n_heads = n_heads
+        self.qkv = nn.Linear(d, 3 * d)
+        self.proj = nn.Linear(d, d)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x, causal: bool = False, pad_mask=None):
+        B, T, d = x.shape
+        q, k, v = self.qkv(x).view(B, T, 3, self.n_heads, d // self.n_heads).permute(2, 0, 3, 1, 4)
+        scores = q @ k.transpose(-2, -1) / math.sqrt(d // self.n_heads)            # (B, heads, T, T)
+        if causal:
+            scores = scores.masked_fill(torch.triu(torch.ones(T, T, dtype=torch.bool, device=x.device), 1),
+                                        float("-inf"))
+        if pad_mask is not None:
+            scores = scores.masked_fill(pad_mask[:, None, None, :], float("-inf"))
+        out = self.dropout(scores.softmax(dim=-1)) @ v
+        return self.proj(out.transpose(1, 2).reshape(B, T, d))
+
+
+class TransformerBlock(nn.Module):
+    """x = x + Attention(LN(x));  x = x + MLP(LN(x))."""
+
+    def __init__(self, d: int, n_heads: int, dropout: float = 0.0):
+        super().__init__()
+        self.norm1, self.norm2 = nn.LayerNorm(d), nn.LayerNorm(d)
+        self.attn = Attention(d, n_heads, dropout)
+        self.mlp = nn.Sequential(nn.Linear(d, 4 * d), nn.GELU(), nn.Linear(4 * d, d), nn.Dropout(dropout))
+
+    def forward(self, x, causal: bool = False, pad_mask=None):
+        x = x + self.attn(self.norm1(x), causal, pad_mask)
+        return x + self.mlp(self.norm2(x))
