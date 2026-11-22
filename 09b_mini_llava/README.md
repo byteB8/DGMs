@@ -61,8 +61,29 @@ python 09b_mini_llava/figures.py    # figures and table
 
 ## Checklist
 
-- [ ] Stage 1: projector only, language model frozen
-- [ ] Stage 2: projector + LoRA
-- [ ] Control: questions paired with other images
+- [x] Stage 1: projector only, language model frozen
+- [x] Stage 2: projector + LoRA
+- [x] Control: questions paired with other images
 
 ## Results
+
+Accuracy on all questions of the 5000 test scenes (about 40k questions).
+
+| Question type | Projector only (0.78 M trained) | Projector + LoRA (1.24 M trained) | Other image's features (LoRA model) |
+|---|---|---|---|
+| count | 0.999 | 1.000 | 0.319 |
+| shape | 0.934 | 0.999 | 0.331 |
+| color | 0.797 | 0.999 | 0.260 |
+| size | 0.987 | 0.998 | 0.500 |
+| exists (yes / no) | 0.914 | 0.932 | 0.494 |
+| all | 0.919 | 0.991 | 0.374 |
+
+- **A projector alone gets most of the way.** With the language model untouched, 0.78 M trained parameters answer
+  92 % of questions. Count and size are near perfect from the start.
+- **LoRA fixes color and shape.** Adding 0.46 M adapter weights inside the LM lifts color from 80 % to 99.9 % and
+  shape from 93 % to 99.9 % within 1000 steps. The frozen LM can read the visual tokens, but tying "the shape on the
+  left" to the right visual tokens needed a small change inside attention.
+- **"Is there a red square?" stays hardest** (93 %). It needs color and shape bound together and a check over every
+  object, the same binding problem as in 09a.
+- **The answers come from the image.** With another image's features, accuracy falls to the level of guessing:
+  1/4 for color, 1/3 for shape and count, 1/2 for size and yes / no.
