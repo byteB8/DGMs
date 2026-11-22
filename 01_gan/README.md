@@ -72,7 +72,7 @@ python 01_gan/train.py --data 8gauss --loss ns    # a single run
 
 ## Checklist
 
-- [ ] 8 Gaussians: minimax vs non-saturating vs WGAN-GP, 3 seeds
+- [ ] 8 Gaussians: minimax vs non-saturating vs WGAN-GP
 - [ ] Fashion-MNIST: DCGAN and WGAN-GP
 - [ ] Fashion-MNIST: conditional DCGAN
 

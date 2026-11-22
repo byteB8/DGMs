@@ -12,12 +12,10 @@ job() {  # job <gpu> <run name> <train.py args...>
     CUDA_VISIBLE_DEVICES=$gpu $PY 01_gan/train.py --name "$name" "$@" > "01_gan/runs/$name.out" 2>&1 &
 }
 
-# 8 Gaussians: three generator losses, three seeds each
-for seed in 0 1 2; do
-    job 0 "8gauss_minimax_s$seed" --data 8gauss --loss minimax --seed $seed
-    job 0 "8gauss_ns_s$seed" --data 8gauss --loss ns --seed $seed
-    job 1 "8gauss_wgan-gp_s$seed" --data 8gauss --loss wgan-gp --seed $seed
-done
+# 8 Gaussians: three generator losses
+job 0 8gauss_minimax_s0 --data 8gauss --loss minimax
+job 0 8gauss_ns_s0 --data 8gauss --loss ns
+job 1 8gauss_wgan-gp_s0 --data 8gauss --loss wgan-gp
 
 # Fashion-MNIST: DCGAN, conditional DCGAN, WGAN-GP
 job 0 fmnist_ns_s0 --data fmnist --loss ns
