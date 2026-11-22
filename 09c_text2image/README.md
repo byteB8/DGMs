@@ -81,3 +81,13 @@ python 09c_text2image/figures.py    # figures and table
 - **A closed world.** With 4 colors, 3 shapes, 2 sizes and 3 positions, the model has seen most scenes it is asked for.
   The unseen captions are the only real test of composition, and they are a small set.
 
+### Figures
+
+**Samples from test captions** with guidance $w$ = 0, 1, 3 (same noise in each column).
+
+![](figs/samples.png)
+
+**Checks by guidance weight.** Left: 09b answers that match the caption, per question type.
+Right: images with every answer right; dotted lines are real images.
+
+![](figs/metrics.png)
