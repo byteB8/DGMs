@@ -65,8 +65,38 @@ python 08_vqvae_prior/figures.py    # figures and tables
 
 ## Checklist
 
-- [ ] VQ-VAE: reconstructions and code usage
-- [ ] Transformer prior over codes, class-conditional
-- [ ] Samples: quality, label accuracy and sampling time
+- [x] VQ-VAE: reconstructions and code usage
+- [x] Transformer prior over codes, class-conditional
+- [x] Samples: quality, label accuracy and sampling time
 
 ## Results
+
+| VQ-VAE | Value |
+|---|---|
+| Test MSE / PSNR | 0.0225 / 22.5 dB |
+| Codes used / perplexity (of 128) | 128 / 92.2 |
+| One image as codes | 49 x log2(128) = 343 bits |
+| Parameters | 1.16 M |
+
+| Prior | Value |
+|---|---|
+| Test -log p(code) | 2.04 nats per code |
+| Test -log p(codes) per image | 144 bits (343 for uniform codes) |
+| Parameters | 4.82 M |
+
+| Images (2000) | FID-lite | Class KL | Label accuracy |
+|---|---|---|---|
+| Reconstructions | 19.0 | 0.011 | - |
+| Prior samples, class-conditional | 20.8 | 0.010 | 0.88 |
+
+Sampling takes 5.4 s per 1000 images: 49 prior steps and one decoder pass (the PixelCNN in 04 needs 784 passes).
+
+- **Without restarts the codebook collapses.** After epoch 1 only 21 codes were in use (perplexity 6).
+  Restarting unused codes revived 82 of them at epoch 2 (with a brief jump in reconstruction error), and by the end all
+  128 are used (perplexity 92).
+- **A few codes paint the background.** The same handful of codes fills the border of almost every image
+  (see the code maps below), so the prior predicts them almost for free.
+- **The prior compresses the codes by 58 %.** 144 bits per image instead of 343. It starts to overfit after
+  about 12 epochs (train NLL keeps falling, test NLL flattens).
+- **Samples are almost as good as reconstructions.** FID-lite 20.8 against 19.0, the limit set by the decoder;
+  88 % of samples show the requested class. For comparison, the WGAN-GP in 01 reached 14.8 and the conditional GAN 56.6.
