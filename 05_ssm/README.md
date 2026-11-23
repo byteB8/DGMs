@@ -1,6 +1,6 @@
 # 05 State space model
 
-The same task as 04: binarized MNIST, $\log p(x) = \sum_t \log p(x_t \mid x_{<t})$, but each image is read as a
+The same task as 04: binarized MNIST, $\log p(x) = \sum_t \log p(x_t \mid x_{\lt t})$, but each image is read as a
 sequence of 784 pixels. Two sequence models of similar size predict the next pixel:
 a diagonal state space model (S4D) and a causal transformer.
 
@@ -44,7 +44,7 @@ $\mathrm{Im}(A_n) = \pi n$ gives each mode its own oscillation frequency.
 | $y = K * u + D u$ (FFT) | `model.py: S4DLayer.forward` |
 | $s_k = \bar A s_{k-1} + \bar B u_k$ | `model.py: S4DLayer.step` |
 | $\mathrm{softmax}(QK^\top/\sqrt{d_h} + M)V$, KV cache | `model.py: CausalSelfAttention` |
-| $-\sum_t \log p(x_t \mid x_{<t})$ | `objective.py: nll_per_sequence` |
+| $-\sum_t \log p(x_t \mid x_{\lt t})$ | `objective.py: nll_per_sequence` |
 | parallel mode = step mode | `sample.py: step_matches_parallel` |
 
 The factor 2 in the kernel accounts for the complex-conjugate modes, which are not stored.
