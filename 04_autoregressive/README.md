@@ -7,7 +7,7 @@ each predicted by a network that only sees the pixels before it.
 
 **Chain rule.** Order the pixels row by row. Then, exactly,
 
-$$p(x) = \prod_{i=1}^{784} p(x_i \mid x_1, \dots, x_{i-1}), \qquad \log p(x) = \sum_i \log p(x_i \mid x_{<i})$$
+$$p(x) = \prod_{i=1}^{784} p(x_i \mid x_1, \dots, x_{i-1}), \qquad \log p(x) = \sum_i \log p(x_i \mid x_{\lt i})$$
 
 Example with 2 pixels: if $p(x_1 = 1) = 0.2$ and $p(x_2 = 1 \mid x_1 = 1) = 0.9$, then $p(1, 1) = 0.2 \times 0.9 = 0.18$.
 
@@ -22,7 +22,7 @@ A single masked stack misses some pixels above and to the right (the blind spot)
 
 Each layer uses a gated unit $\tanh(a) \odot \sigma(b)$.
 
-**Sampling is sequential.** $x_i \sim p(x_i \mid x_{<i})$ needs the pixels before it, so drawing one image takes 784 forward passes.
+**Sampling is sequential.** $x_i \sim p(x_i \mid x_{\lt i})$ needs the pixels before it, so drawing one image takes 784 forward passes.
 
 **Units.** Bits per pixel $= \dfrac{-\log p(x)}{784 \ln 2}$.
 
@@ -30,12 +30,12 @@ Each layer uses a gated unit $\tanh(a) \odot \sigma(b)$.
 
 | Math | Code |
 |---|---|
-| $-\sum_i \log p(x_i \mid x_{<i})$ | `objective.py: nll_per_image` |
+| $-\sum_i \log p(x_i \mid x_{\lt i})$ | `objective.py: nll_per_image` |
 | kernel masks (rows above / pixels to the left) | `model.py: vertical_mask`, `horizontal_mask` |
 | masked convolution | `model.py: MaskedConv2d` |
 | $\tanh(a) \odot \sigma(b)$, vertical feeds horizontal | `model.py: GatedLayer` |
-| $x_i \sim p(x_i \mid x_{<i})$ in raster order | `sample.py: sample` |
-| output $i$ depends only on $x_{<i}$ | `sample.py: check_causality`, `dependency_map` |
+| $x_i \sim p(x_i \mid x_{\lt i})$ in raster order | `sample.py: sample` |
+| output $i$ depends only on $x_{\lt i}$ | `sample.py: check_causality`, `dependency_map` |
 
 ## Setup
 
