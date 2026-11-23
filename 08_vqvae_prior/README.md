@@ -27,7 +27,7 @@ The prior is learned afterwards instead.
 
 **Prior.** Over the 49 codes in raster order, conditioned on the class $y$, by the chain rule (as in 04):
 
-$$\log p(c \mid y) = \sum_{t=1}^{49} \log p(c_t \mid y, c_{<t})$$
+$$\log p(c \mid y) = \sum_{t=1}^{49} \log p(c_t \mid y, c_{\lt t})$$
 
 **Compression.** One image becomes $49 \log_2 128 = 343$ bits as codes. A good prior needs fewer bits on average:
 $-\log_2 p(c \mid y)$.
@@ -42,10 +42,10 @@ Unused codes are restarted at random encoder outputs after each epoch.
 | $k = \arg\min_j \lVert z_e - e_j \rVert^2$ | `model.py: VectorQuantizer.indices` |
 | $z_q = z_e + \mathrm{sg}(e_k - z_e)$ | `model.py: VectorQuantizer.forward` |
 | reconstruction + codebook + $\beta$ commitment | `objective.py: vqvae_loss` |
-| $-\sum_t \log p(c_t \mid y, c_{<t})$ | `objective.py: prior_nll` |
+| $-\sum_t \log p(c_t \mid y, c_{\lt t})$ | `objective.py: prior_nll` |
 | $\exp(H)$ of code usage | `objective.py: perplexity` |
 | restart unused codes | `train.py: train_vqvae` |
-| $c_t \sim p(c_t \mid y, c_{<t})$, then decode | `sample.py: sample_codes`, `model.py: VQVAE.decode` |
+| $c_t \sim p(c_t \mid y, c_{\lt t})$, then decode | `sample.py: sample_codes`, `model.py: VQVAE.decode` |
 
 ## Setup
 
