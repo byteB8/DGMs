@@ -9,12 +9,12 @@ Uses pretrained [SigLIP-base](https://huggingface.co/google/siglip-base-patch16-
 ## Math
 
 **A language model is an autoregressive model** (as in 04 and 05, over words):
-$p(w_1, \dots, w_n) = \prod_t p(w_t \mid w_{<t})$. Each word id $w$ enters as a vector $E_w \in \mathbb R^{576}$.
+$p(w_1, \dots, w_n) = \prod_t p(w_t \mid w_{\lt t})$. Each word id $w$ enters as a vector $E_w \in \mathbb R^{576}$.
 
 **Visual tokens.** SigLIP turns the image into 196 patch vectors (768-d); 2 x 2 averaging leaves 49.
 A projector $P$ (MLP) maps each to $\mathbb R^{576}$, the LM's word space. These 49 vectors are placed before the question:
 
-$$p(\text{answer} \mid x, q) = \prod_t p\left(a_t \mid P(\mathrm{SigLIP}(x))_{1..49},\ E_{q},\ a_{<t}\right)$$
+$$p(\text{answer} \mid x, q) = \prod_t p\left(a_t \mid P(\mathrm{SigLIP}(x))_{1..49},\ E_{q},\ a_{\lt t}\right)$$
 
 Example: for "What color is the shape on the left?" the LM sees 49 visual vectors, then the question tokens, and should put
 most probability on the token " red".
